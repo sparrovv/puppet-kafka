@@ -101,16 +101,20 @@ class kafka (
     }
   }
 
+  if ! defined(Group[$group]) {
   group { $group:
     ensure => present,
     gid    => $group_id,
   }
+  }
 
+  if ! defined(User[$group]) {
   user { $user:
     ensure  => present,
     shell   => '/bin/bash',
     require => Group[$group],
     uid     => $user_id,
+  }
   }
 
   file { $package_dir:
