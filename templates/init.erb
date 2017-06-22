@@ -106,7 +106,11 @@ stop() {
     fi
   fi
 
-  kill `cat "$PID_FILE"`;
+  pid=`cat "$PID_FILE"`;
+  kill $pid
+
+  while kill -0 $pid 2> /dev/null; do sleep 1; done;
+
   rm -f -- "$PID_FILE";
   echo "$NAME stopped"
   return 0
@@ -143,7 +147,6 @@ case "$1" in
   restart)
     echo "Restarting daemon: $NAME"
 	  stop
-    sleep 2
     start
 	;;
 
